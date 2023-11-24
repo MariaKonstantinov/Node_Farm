@@ -1,6 +1,6 @@
 # Node-Farm - Node.js :seedling:
 
-### Udemy Node.js 2023 course
+### Mini Project
 
 ### :four_leaf_clover: Overview
 
@@ -10,7 +10,7 @@
 
 **:four_leaf_clover: Project Concept**
 
-The concept of this project - to display a simple product list. Each product has a card with an overview.
+The concept of this project - to build a simple API to display a product list. Users can click on the product and open a card with a product overview.
 
 **:four_leaf_clover: Project Technologies and Features**
 
