@@ -1,5 +1,6 @@
 const fs = require("fs");
 const http = require("http");
+const path = require("path");
 const url = require("url");
 
 // SERVER
@@ -24,15 +25,15 @@ const replaceTemplate = (temp, product) => {
 
 // we can read the templates once in a sync way outside the callback function (same way we did with the (dev-data) below)
 const tempOverview = fs.readFileSync(
-  `${__dirname}/templates/template-overview.html`,
+  `${__dirname}/public/templates/template-overview.html`,
   "utf-8"
 );
 const tempCard = fs.readFileSync(
-  `${__dirname}/templates/template-card.html`,
+  `${__dirname}/public/templates/template-card.html`,
   "utf-8"
 );
 const tempProduct = fs.readFileSync(
-  `${__dirname}/templates/template-product.html`,
+  `${__dirname}/public/templates/template-product.html`,
   "utf-8"
 );
 
@@ -45,6 +46,7 @@ const dataObj = JSON.parse(data);
 
 // each time a new request hits the server, this callback function is being executed
 const server = http.createServer((req, res) => {
+  //const { query, pathname } = url.parse(req.url, true);
   const { query, pathname } = url.parse(req.url, true);
 
   // OVERVIEW PAGE -------------------------------------------->
@@ -79,11 +81,17 @@ const server = http.createServer((req, res) => {
 
     // NOT FOUND
   } else {
-    res.writeHead(404, {
-      "Content-type": "text/html",
-      "my-own-header": "hello-world",
+    const filePath = path.join(__dirname, "public", req.url);
+
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        res.writeHead(404, { "Content-type": "text/html" });
+        res.end("<h1>Page Not Found!</h1>");
+      } else {
+        res.writeHead(200, { "Content-type": "text/html" });
+        res.end(data);
+      }
     });
-    res.end("<h1>Page Not Found!</h1>");
   }
 });
 
