@@ -14,7 +14,7 @@ const replaceTemplate = (temp, product) => {
   output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
   output = output.replace(/{%QUANTITY%}/g, product.quantity);
   output = output.replace(/{%DESCRIPTION%}/g, product.description);
-  output = output.replace(/{%IMAGE%}/g, product.image);
+  output = output.replace(/{%ID%}/g, product.id);
 
   // condition for non-organic product (if the condition is false in boolean in JSON); "not-organic" is a css class
   if (!product.organic)
@@ -45,10 +45,10 @@ const dataObj = JSON.parse(data);
 
 // each time a new request hits the server, this callback function is being executed
 const server = http.createServer((req, res) => {
-  const pathName = req.url;
+  const { query, pathname } = url.parse(req.url, true);
 
   // OVERVIEW PAGE -------------------------------------------->
-  if (pathName === "/" || pathName === "/overview") {
+  if (pathname === "/" || pathname === "/overview") {
     res.writeHead(200, { "Content-type": "text/html" });
 
     // loop over the dataObj array with all products and in each iteration replace placeholders in template card with the current product which is "el"; in arrow functions if we don't have {} the value gets automatically returned without "return" keyword
@@ -63,11 +63,15 @@ const server = http.createServer((req, res) => {
     res.end(output);
 
     // PRODUCT PAGE -------------------------------------------->
-  } else if (pathName === "/product") {
-    res.end("This is the PRODUCT");
+  } else if (pathname === "/product") {
+    res.writeHead(200, { "Content-type": "text/html" });
+    const product = dataObj[query.id];
+    const output = replaceTemplate(tempProduct, product);
+
+    res.end(output);
 
     // API -------------------------------------------->
-  } else if (pathName === "/api") {
+  } else if (pathname === "/api") {
     res.writeHead(200, { "Content-type": "application/json" });
 
     // api sending back response to client, needs to be a string, not an object
