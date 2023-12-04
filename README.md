@@ -10,7 +10,7 @@
 
 **:four_leaf_clover: Project Concept**
 
-The concept of this project - to build a simple API to display a product list. Users can click on the product and open a card with a product overview.
+The concept of this project - to build a simple API to display a product list. Users can click on the product and open a card with a product description.
 
 **:four_leaf_clover: Project Technologies and Features**
 
